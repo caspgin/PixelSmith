@@ -1,4 +1,10 @@
+
+#discard zip files
 *.zip
 
-
+#contains build folder
 out/
+
+#diagram for testing
+diagram.txt
+
