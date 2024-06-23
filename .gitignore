@@ -8,3 +8,6 @@ out/
 #diagram for testing
 diagram.txt
 
+
+#dev
+compile_commands.json
