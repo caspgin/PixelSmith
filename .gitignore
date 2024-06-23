@@ -11,3 +11,7 @@ diagram.txt
 
 #dev
 compile_commands.json
+
+
+#undofile for nvim
+~/
