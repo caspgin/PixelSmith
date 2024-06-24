@@ -26,9 +26,10 @@ const char * vertexShaderSource = "#version 330 core\n"
 const char * fragmentShaderSource = "#version 330 core\n"
 	"out vec4 FragColor;\n"
 	"in vec4 vertexColor;\n"
+	"uniform vec4 ourColor;\n"
 	"void main()\n"
 	"{\n"
-	"	FragColor = vertexColor;\n"
+	"	FragColor = ourColor;\n"
 	"}\n\0";
 
 int main() {
@@ -191,7 +192,11 @@ int main() {
 		
 		//Draw a triangle
 		//----------------------------------------------
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 		glUseProgram(shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		glBindVertexArray(VAO[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
