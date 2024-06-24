@@ -93,15 +93,13 @@ Shader::Shader(fs::path vertexPath, fs::path fragmentPath){
 	std::string vertexCode;
 	std::string fragmentCode;
 	
-	auto start = std::chrono::high_resolution_clock::now();
+	/* auto start = std::chrono::high_resolution_clock::now(); */
 	//-------------------------------------------------------------------------
 	readFiles(vertexPath, fragmentPath, vertexCode, fragmentCode);
 
-	auto end = std::chrono::high_resolution_clock::now();
-
-	std::chrono::duration<double> duration = end - start;
-
-	std::cout << "Time taken to read files together: " << duration.count() << std::endl;
+	/* auto end = std::chrono::high_resolution_clock::now(); */
+	/* std::chrono::duration<double> duration = end - start; */
+	/* std::cout << "Time taken to read files together: " << duration.count() << std::endl; */
 
 	const char * vShaderCode = vertexCode.c_str();
 	const char * fShaderCode = fragmentCode.c_str();
@@ -116,4 +114,12 @@ void Shader::use(){
 
 void Shader::deleteProgram(){
 	glDeleteProgram(this->_id);
+}
+
+void Shader::setFloat(const std::string& name, float value) const {
+	glUniform1f(glGetUniformLocation(this->_id, name.c_str()), value);
+}
+
+void Shader::setInt(const std::string& name, int value) const {
+	glUniform1i(glGetUniformLocation(this->_id, name.c_str()), value);
 }

@@ -57,10 +57,11 @@ int main() {
 	//-------------------------------------------------------------------------------------
 	//Create a vertex Shader Object
 	fs::path shaderDir = SHADER_DIR;
-	fs::path vertexPath = shaderDir / "example1/test_VS.glsl";
-	fs::path fragmentPath = shaderDir / "example1/test_FS.glsl";
+	fs::path vertexPath = shaderDir / "example2/offset_VS.glsl";
+	fs::path fragmentPath = shaderDir / "example2/offset_FS.glsl";
 	Shader shaderProgram(vertexPath, fragmentPath);
-
+	/* shaderProgram.use(); */
+	shaderProgram.setFloat("horizontalOffset", 0.5f);
 	//Vertex Data, Buffers and attribute linking
 	//-------------------------------------------------------------------------------------------------
 	float vertices[] = {
