@@ -15,8 +15,13 @@ message(STATUS "Compiler flags: ${CMAKE_CXX_FLAGS}")
 set(SHADER_DIR "${CMAKE_SOURCE_DIR}/shaders" CACHE PATH "Path to shader files")
 add_compile_definitions(SHADER_DIR="${SHADER_DIR}")
 
+#Set Texture Dir 
+set(TEXTURE_DIR "${CMAKE_SOURCE_DIR}/textures" CACHE PATH "Path to texture files")
+add_compile_definitions(TEXTURE_DIR="${TEXTURE_DIR}")
+
 #Add external libraries
 add_subdirectory(thirdParty/glad)
+add_subdirectory(thirdParty/stbi)
 add_subdirectory(external/glfw)
 add_subdirectory(customLib/shaderLib)
 
@@ -29,5 +34,5 @@ target_include_directories(${PROJECT_NAME}
 )
 
 #Link Libraries
-target_link_libraries(${PROJECT_NAME} glad glfw shaderLib)
+target_link_libraries(${PROJECT_NAME} glad glfw shaderLib stb_image)
 
