@@ -85,7 +85,7 @@ int main() {
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
-	std::cout << "Vertex Shader is good" << std::endl;
+	
 	//create a fragment Shader Object
 	unsigned int fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -99,7 +99,6 @@ int main() {
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 	
-	std::cout << "Fragment Shader is good" << std::endl;
 
 	//create a shader program object
 	unsigned int shaderProgram;
@@ -116,7 +115,6 @@ int main() {
 	}
 	
 
-	std::cout << "Linking Shader is good" << std::endl;
 
 	//Delete Shader objects as they have been linked to shaderProgram
 	glDeleteShader(vertexShader);
@@ -126,9 +124,14 @@ int main() {
 	//-------------------------------------------------------------------------------------------------
 	float vertices[] = {
 		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+	};
+
+	float vertices2[] = {
 		-0.5f, 0.5f, 0.0f,
+		-1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
 	};
 
 	unsigned int indices[] = {
@@ -137,20 +140,29 @@ int main() {
 	};
 
 	//Generate a vertex buffer object and vertex array object
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	unsigned int VBO[2], VAO[2];
+	glGenVertexArrays(2, VAO);
+	glGenBuffers(2, VBO);
 	
 	//Bind the vertex arrray object
-	glBindVertexArray(VAO);
+	glBindVertexArray(VAO[0]);
 
 	//Bind the buffer object 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	
+	//Since glVertexAttribPointer bounds the VBO to VAO we can unbind the buffer
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+	glBindVertexArray(0);
+
+	glBindVertexArray(VAO[1]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -159,7 +171,8 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // Render loop
 	// -----------------------------------------------------------------------------
     while (!glfwWindowShouldClose(window)) {
@@ -176,8 +189,13 @@ int main() {
 		//Draw a triangle
 		//----------------------------------------------
 		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO[0]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+		glBindVertexArray(VAO[1]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
         // Swap front and back buffers and poll events
@@ -188,9 +206,8 @@ int main() {
 
     // Clean up and exit
 	// -----------------------------------------------------------------------------------
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	glDeleteVertexArrays(2, VAO);
+	glDeleteBuffers(2, VBO);
 	glDeleteProgram(shaderProgram);
     glfwTerminate();
 
