@@ -78,8 +78,8 @@ int main() {
 	//-------------------------------------------------------------------------------------
 	//Create a vertex Shader Object
 	fs::path shaderDir = SHADER_DIR;
-	fs::path vertexPath = shaderDir / "example4/Texture_VS.glsl";
-	fs::path fragmentPath = shaderDir / "example4/Texture_FS.glsl";
+	fs::path vertexPath = shaderDir / "example5/Texture_VS.glsl";
+	fs::path fragmentPath = shaderDir / "example5/Texture_FS.glsl";
 	Shader shaderProgram(vertexPath, fragmentPath);
 	//Texture generation
 	//------------------------------------------------------------------------------------------------
@@ -96,10 +96,10 @@ int main() {
 	//Vertex Data, Buffers and attribute linking
 	//-------------------------------------------------------------------------------------------------
 	float vertices[] = {
-		 0.5f,  0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f, 
-		 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	2.0f, 2.0f, 
+		 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	2.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.0f,	0.0f, 1.0f
+		-0.5f,  0.5f, 0.0f,		1.0f, 1.0f, 0.0f,	0.0f, 2.0f
 	};
 
 	unsigned int indices[] = {
