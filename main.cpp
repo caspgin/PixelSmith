@@ -186,7 +186,8 @@ int main() {
 		glm::mat4 projection	= glm::mat4(1.0f);
 		model = glm::rotate(model, (float) glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f,1.0f,0.0f));
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/ (float) SCR_HEIGHT, 0.1f, 100.0f);
+		/* projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/ (float) SCR_HEIGHT, 0.1f, 100.0f); */
+		projection = glm::ortho(-1.0f,1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 		shaderProgram.setMat4("model", model);
 		shaderProgram.setMat4("view", view);
 		shaderProgram.setMat4("projection", projection);
