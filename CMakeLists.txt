@@ -23,6 +23,7 @@ add_compile_definitions(TEXTURE_DIR="${TEXTURE_DIR}")
 add_subdirectory(thirdParty/glad)
 add_subdirectory(thirdParty/stbi)
 add_subdirectory(external/glfw)
+add_subdirectory(external/glm)
 add_subdirectory(customLib/shaderLib)
 
 #Add executable
@@ -34,5 +35,5 @@ target_include_directories(${PROJECT_NAME}
 )
 
 #Link Libraries
-target_link_libraries(${PROJECT_NAME} glad glfw shaderLib stb_image)
+target_link_libraries(${PROJECT_NAME} glad glfw shaderLib stb_image glm)
 
