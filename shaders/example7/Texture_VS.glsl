@@ -5,10 +5,9 @@ layout (location = 2) in vec2 aCords;
 
 out vec3 vertexColor;
 out vec2 texCords;
-uniform mat4 transform;
 
 void main(){
-	gl_Position = transform * vec4(aPos, 1.0f);
+	gl_Position = vec4(aPos, 1.0f);
 	vertexColor = aColor;
 	texCords = aCords;
 }

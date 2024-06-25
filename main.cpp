@@ -1,9 +1,11 @@
 
+#include <glm/ext/matrix_transform.hpp>
 #include <glad/glad.h>
 #include <stb_image.h>
 #include <GLFW/glfw3.h>
 #include <Shader.hpp>
 #include <iostream>
+#include <glm/glm.hpp>
 
 void framebuffer_size_callback(GLFWwindow * window, int width, int height){
 	glViewport(0,0,width,height);
@@ -93,6 +95,7 @@ int main() {
 	shaderProgram.setInt("texture1", 0);
 	shaderProgram.setInt("texture2", 1);
 
+
 	//Vertex Data, Buffers and attribute linking
 	//-------------------------------------------------------------------------------------------------
 	float vertices[] = {
@@ -106,6 +109,7 @@ int main() {
 		0, 1, 3,
 		1, 2, 3
 	};
+
 
 	//Generate a vertex buffer object and vertex array object
 	unsigned int VBO, VAO, EBO;
@@ -158,7 +162,15 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
+		
+		glm::mat4 transform = glm::mat4(1.0f);
+		transform = glm::translate(transform, glm::vec3(0.5f,-0.5f,0.0f));
+		transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f,0.0f,1.0f));
+
+
 		shaderProgram.use();
+		shaderProgram.setMat4("transform", transform);
+
 		glBindVertexArray(VAO);
 		/* glDrawArrays(GL_TRIANGLES, 0, 3); */
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
