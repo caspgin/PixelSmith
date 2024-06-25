@@ -19,6 +19,10 @@ void textureGenNLoad( unsigned int & texture, std::string imageFileName, GLenum 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+//camera 
+glm::vec3 cameraPos	    = glm::vec3(0.0f,0.0f,3.0f);
+glm::vec3 cameraForward = glm::vec3(0.0f,0.0f,-1.0f);
+glm::vec3 cameraUp      = glm::vec3(0.0f,1.0f,0.0f);
 int main() {
 
 	// Initialize GLFW
@@ -193,11 +197,9 @@ int main() {
 		
 
 		shaderProgram.use();
-		float camX = sin(glfwGetTime()) * 5.0f;
-		float camZ = cos(glfwGetTime()) * 5.0f;
 		glm::mat4 view			= glm::mat4(1.0f);
 		glm::mat4 projection	= glm::mat4(1.0f);
-		view = glm::lookAt(glm::vec3(camX,0,camZ),glm::vec3(0,0,0), glm::vec3(0.0f, 1.0f, 0.0f));
+		view = glm::lookAt(cameraPos,cameraPos + cameraForward, cameraUp);
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
 		/* projection = glm::ortho(-5.0f,5.0f, -5.0f, 5.0f, 0.1f, 100.0f); */
 		shaderProgram.setMat4("view", view);
@@ -241,8 +243,21 @@ void framebuffer_size_callback(GLFWwindow * window, int width, int height){
 
 void processInput(GLFWwindow * window){
 	
+	const float CameraSpeed = 0.05f;
 	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		glfwSetWindowShouldClose(window,true);
+	}
+	else if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+		cameraPos += CameraSpeed * cameraForward;
+	}
+	else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+		cameraPos -= CameraSpeed * cameraForward;
+	}
+	else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+		cameraPos -= glm::normalize(glm::cross(cameraForward, cameraUp))  * CameraSpeed;
+	}
+	else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+		cameraPos += glm::normalize(glm::cross(cameraForward, cameraUp))  * CameraSpeed;
 	}
 }
 
