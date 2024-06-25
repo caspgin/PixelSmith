@@ -23,6 +23,12 @@ const unsigned int SCR_HEIGHT = 600;
 glm::vec3 cameraPos	    = glm::vec3(0.0f,0.0f,3.0f);
 glm::vec3 cameraForward = glm::vec3(0.0f,0.0f,-1.0f);
 glm::vec3 cameraUp      = glm::vec3(0.0f,1.0f,0.0f);
+
+
+//Movement
+float deltaTime = 0.0f;
+float lastFrameTime = 0.0f;
+
 int main() {
 
 	// Initialize GLFW
@@ -177,7 +183,10 @@ int main() {
     // Render loop
 	// -----------------------------------------------------------------------------
     while (!glfwWindowShouldClose(window)) {
-		
+	
+		float currentFrameTime = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
 		//Process Input
 		//----------------------------------------------
 		processInput(window);
@@ -243,7 +252,7 @@ void framebuffer_size_callback(GLFWwindow * window, int width, int height){
 
 void processInput(GLFWwindow * window){
 	
-	const float CameraSpeed = 0.05f;
+	const float CameraSpeed = 2.5 * deltaTime;
 	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		glfwSetWindowShouldClose(window,true);
 	}
