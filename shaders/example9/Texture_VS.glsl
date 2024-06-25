@@ -5,13 +5,10 @@ layout (location = 2) in vec2 aCords;
 
 out vec3 vertexColor;
 out vec2 texCords;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 transform;
 
 void main(){
-	gl_Position = projection * view * model * vec4(aPos, 1.0f);
+	gl_Position = transform * vec4(aPos, 1.0f);
 	vertexColor = aColor;
 	texCords = aCords;
 }
