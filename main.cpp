@@ -193,8 +193,8 @@ int main() {
 		
 
 		shaderProgram.use();
-		float camX = sin(glfwGetTime()) * 10.0f;
-		float camZ = cos(glfwGetTime()) * 10.0f;
+		float camX = sin(glfwGetTime()) * 5.0f;
+		float camZ = cos(glfwGetTime()) * 5.0f;
 		glm::mat4 view			= glm::mat4(1.0f);
 		glm::mat4 projection	= glm::mat4(1.0f);
 		view = glm::lookAt(glm::vec3(camX,0,camZ),glm::vec3(0,0,0), glm::vec3(0.0f, 1.0f, 0.0f));
