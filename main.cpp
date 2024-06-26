@@ -13,19 +13,25 @@
 void framebuffer_size_callback(GLFWwindow * window, int width, int height);
 void processInput(GLFWwindow * window);
 void textureGenNLoad( unsigned int & texture, std::string imageFileName, GLenum dtype  );
-
-
+void mouse_callback(GLFWwindow * window, double xposIn, double yposIn);
+void scroll_callback(GLFWwindow * window, double xoffset, double yoffset);
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 //camera 
 glm::vec3 cameraPos	    = glm::vec3(0.0f,0.0f,3.0f);
 glm::vec3 cameraForward = glm::vec3(0.0f,0.0f,-1.0f);
 glm::vec3 cameraUp      = glm::vec3(0.0f,1.0f,0.0f);
 
+bool firstMouse = true;
+float yaw	= -90.0f;
+float pitch = 0.0f;
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+float fov   = 45.0f;
 
-//Movement
+//timing
 float deltaTime = 0.0f;
 float lastFrameTime = 0.0f;
 
@@ -57,6 +63,11 @@ int main() {
     // Make the window's context current
     glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+	
+	// tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//Use GLAD to load function pointers
 	//------------------------------------------------------------------------------------
@@ -64,6 +75,8 @@ int main() {
 		std::cerr << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+
 	
     // Set the viewport size and the callback function for window resizing
     /* glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); */
@@ -209,7 +222,7 @@ int main() {
 		glm::mat4 view			= glm::mat4(1.0f);
 		glm::mat4 projection	= glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos,cameraPos + cameraForward, cameraUp);
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
 		/* projection = glm::ortho(-5.0f,5.0f, -5.0f, 5.0f, 0.1f, 100.0f); */
 		shaderProgram.setMat4("view", view);
 		shaderProgram.setMat4("projection", projection);
@@ -288,4 +301,55 @@ void textureGenNLoad( unsigned int & texture, std::string imageFileName, GLenum 
 		std::cout << "Failed to load texture " << std::endl;
 	}
 	stbi_image_free(data);
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+	float xpos = static_cast<float>(xposIn);
+	float ypos = static_cast<float>(yposIn);
+
+	std::cout << xpos << '\t' << ypos << '\n';
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+
+	    std::cout << xpos << '\t' << ypos << '\n';
+		/* return; */
+    }
+	std::cout << xpos << '\t' << ypos << '\n';
+	float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw   += xoffset;
+    pitch += yoffset;
+
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraForward = glm::normalize(direction);
+} 
+
+void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+{
+	fov -= (float)yoffset;
+	if(fov < 1.0f){
+		fov = 1.0f;
+	}
+	if(fov > 45.0f){
+		fov = 45.0f;
+	}
 }
