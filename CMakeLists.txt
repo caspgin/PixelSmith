@@ -25,6 +25,7 @@ add_subdirectory(thirdParty/stbi)
 add_subdirectory(external/glfw)
 add_subdirectory(external/glm)
 add_subdirectory(customLib/shaderLib)
+add_subdirectory(customLib/cameraLib)
 
 #Add executable
 add_executable(${PROJECT_NAME} main.cpp)
@@ -35,5 +36,5 @@ target_include_directories(${PROJECT_NAME}
 )
 
 #Link Libraries
-target_link_libraries(${PROJECT_NAME} glad glfw shaderLib stb_image glm)
+target_link_libraries(${PROJECT_NAME} glad glfw shaderLib stb_image glm camera)
 
